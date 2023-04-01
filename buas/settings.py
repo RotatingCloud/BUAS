@@ -26,13 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'rotatingcloudbasicauth@gmail.com'
-EMAIL_HOST_PASSWORD = 'jonnybois405'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,7 +49,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'basicAuth.backends.EmailBackend',  # Your custom email backend
+    'basicAuth.backends.EmailOrUsernameBackend',  # Your custom email backend
     'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
 ]
 
@@ -126,9 +119,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "basicAuth/static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'rotatingcloudbasicauth@gmail.com'  # Replace with your Gmail email address
+EMAIL_HOST_PASSWORD = 'jonnybois405'  # Replace with your Gmail email password
+EMAIL_HOST_PASSWORD = 'yvszjhsowpzetwlb'
+

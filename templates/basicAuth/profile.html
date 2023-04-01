@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+</head>
+<body>
+
+    {% for message in messages %}
+
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+
+            <strong>Message:</strong> {{ message }}
+
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+
+                <span aria-hidden="true">&times;</span>
+
+            </button>
+            
+        </div>
+
+    {% endfor %}
+    
+    <h1>Profile</h1>
+
+    <form action="{% url 'update' %}" method="POST">
+
+        {% csrf_token %}
+
+        <div class='form-group'>
+        
+            <label for="id">User ID:</label>
+            <div>{{user.id}}</div>
+        
+        </div>
+
+        <div class='form-group'>
+        
+            <label for="status">Status:</label>
+            
+                
+            {% if user.is_active %}
+
+                <div>Verified</div>
+
+            {% else %}
+
+                <div>Untrusted</div>
+
+            {% endif %}
+            
+        </div>
+    
+        <div class='form-group'>
+
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" value="{{ user.username }}" required>
+
+
+        </div>
+
+        <div class='form-group'>
+
+            <label for="fname">First Name</label>
+            <input type="text" name="fname" id="fname" value="{{ user.first_name }}" required>
+
+        </div>
+
+        <div class='form-group'>
+        
+            <label for="lname">Last Name</label>
+            <input type="text" name="lname" id="lname" value="{{ user.last_name }}" required>
+
+        </div>
+
+        <div class='form-group'>
+        
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" value="{{ user.email }}" required>
+
+        </div>
+
+        <div class="from-group">
+
+            <label for="color">Background Color</label>
+            <input type="color" id="color-input" name="color" value="{{ background_color|default:'#6d6d6d' }}">
+
+        </div>
+        
+
+        <div class="button-container">
+
+            <button type="submit" class="submit-button">Update</button>
+    
+            <a href="/" class="button">Home</a>
+
+            {% if user.is_active == False %}
+
+                <a href="{% url 'resend_activation_email' %}" class="button">Send Activation Email</a>
+                
+            {% endif %}
+    
+        </div>
+
+    </form>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeButtons = document.getElementsByClassName('close');
+            for (let i = 0; i < closeButtons.length; i++) {
+                closeButtons[i].addEventListener('click', function () {
+                    this.closest('.alert').remove();
+                });
+            }
+        });
+    </script>
+
+    <script>
+        const colorInput = document.getElementById('color-input');
+        const bodyElement = document.querySelector('body');
+        const inputElements = document.querySelectorAll('input');
+
+        colorInput.addEventListener('input', (event) => {
+            bodyElement.style.backgroundColor = event.target.value;
+            inputElements.forEach((element) => {
+                element.style.backgroundColor = event.target.value;
+            });
+        });
+    </script>
+
+</body>
+</html>

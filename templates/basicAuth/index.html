@@ -1,33 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 
-    <style> 
-
-        .alert {
-            width: 50%;
-            margin: 0 auto;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        body {
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 </head>
 <body>
@@ -47,19 +29,30 @@
 
     {% if user.is_authenticated %}
 
-        <h3>Hello {{ fname }}!</h3>
-        <h4>You're successfully logged in.</h4>
+        <h3>
+            <span class="first-name">{{ fname }}</span>
+            <span class="username">"{{ username }}"</span>
+            <span class="last-name">{{ lname }}</span>
+        </h3>
         
-        <button type="submit"><a href="/signout">SignOut</a></button>
+        <div class="button-container">
+
+            <a href="/signout" class="button">Sign Out</a>
+            <a href="/profile" class="button">View/Edit Profile</a>
+            <a href="/changepassword" class="button">Change Password</a>
+            <a href="/delete" class="button" id="delete">Delete Account</a>
+        
+        </div>
 
     {% else %}
 
-        <button type="submit"><a href="/signup">SignUp</a></button>
-            <br/>
-        <button type="submit"><a href="/signin">SignIn</a></button>
-            <br/>
+        <div class="button-container">
 
-            
+            <a href="/signup" class="button">Sign Up</a>
+            <a href="/signin" class="button">Sign In</a>
+
+        </div>
+         
     {% endif %}
 
     <script>

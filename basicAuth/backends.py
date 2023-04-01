@@ -1,10 +1,15 @@
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import User
 
-class EmailBackend(BaseBackend):
-    def authenticate(self, request, email=None, password=None, **kwargs):
+class EmailOrUsernameBackend(BaseBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
         try:
-            user = User.objects.get(email=email)
+            # Check if the provided identifier is an email address
+            if '@' in username:
+                user = User.objects.get(email=username)
+            else:
+                user = User.objects.get(username=username)
+
             if user.check_password(password):
                 return user
         except User.DoesNotExist:
