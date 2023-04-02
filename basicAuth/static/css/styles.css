@@ -1,12 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 ::-webkit-scrollbar {
-    width: 0; /* remove scrollbar width */
-    background: transparent; /* make scrollbar transparent */
+
+    width: 0; 
+    background: transparent; 
 }
 
 
 .alert {
+
     width: 50%;
     margin: 0 auto;
     margin-bottom: 10px;
@@ -24,7 +26,6 @@ body {
     height: 100vh;
     background-color: #6d6d6d;
     color: #ffffff;
-
     font-family: 'Poppins', sans-serif;
     letter-spacing: 1px;
 }
@@ -131,14 +132,17 @@ input {
 }
 
 input::-webkit-input-placeholder {
+
     color: rgba(255, 255, 255, 0.521);
 }
 
 input:-ms-input-placeholder {
+
     color: rgba(255, 255, 255, 0.521);
 }
 
 input::placeholder {
+
     color: rgba(255, 255, 255, 0.521);
 }
 
@@ -174,7 +178,7 @@ h3 {
 
 .alert {
 
-    
+    letter-spacing: 1px;
 }
 
 #color-input {
@@ -183,6 +187,6 @@ h3 {
     padding-bottom: 5px;
     border: none;
 
-    background-color: #5e5e5e;
+    background-color: #000000;
     
 }

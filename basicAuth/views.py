@@ -27,9 +27,8 @@ def home(request):
         lname = request.user.last_name
         username = request.user.username
 
-    if user.is_authenticated:
+        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D'})[0]
 
-        user_profile, created = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D'})  # Replace '#FFFFFF' with your default background color
         background_color = user_profile.background_color
 
     context = {
@@ -133,6 +132,7 @@ def signin(request):
             else:
 
                 messages.error(request, "Your account is not activated yet! Please check your email for activation link.")
+                resend_activation_email(request, user)
                 return redirect('signin')
             
         else:
@@ -149,12 +149,24 @@ def signout(request):
     return redirect('home')
     
 def profile(request):
-    
+
     if request.user.is_authenticated:
-        return render(request, 'basicAuth/profile.html')
+
+        user = request.user
+        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D'})[0]
+        background_color = user_profile.background_color
+
+        context = {
+
+            'background_color': background_color,
+        }
+
+        return render(request, 'basicAuth/profile.html', context)
+
     else:
+
         return redirect('home')
-    
+  
 def update(request):
 
     if request.method == 'POST':
@@ -198,93 +210,100 @@ def update(request):
 
 def changepassword(request):
 
-    if request.method == 'POST':
+    if request.user.is_authenticated:
 
-        # Get the post parameters
-        oldpass = request.POST['oldpass']
-        newpass1 = request.POST['newpass1']
-        newpass2 = request.POST['newpass2']
+        user_profile = UserProfile.objects.get_or_create(user=request.user, defaults={'background_color': '#6D6D6D'})[0]
+        background_color = user_profile.background_color
 
-        # Check for erroneous input
-        if newpass1 != newpass2:
-            messages.error(request, "Passwords didn't match!")
-            return redirect('changepassword')
+        if request.method == 'POST':
 
-        if len(newpass1) < 4: 
-            messages.error(request, "Password must be at least 8 characters long!")
-            return redirect('changepassword')
+            # Get the post parameters
+            oldpass = request.POST['oldpass']
+            newpass1 = request.POST['newpass1']
+            newpass2 = request.POST['newpass2']
 
-        myuser = request.user
+            # Check for erroneous input
+            if newpass1 != newpass2:
+                messages.error(request, "Passwords didn't match!")
+                return redirect('changepassword')
 
-        # Check if the old password is correct
-        if not check_password(oldpass, myuser.password):
-            messages.error(request, "The old password is incorrect!")
-            return redirect('changepassword')
+            if len(newpass1) < 4: 
+                messages.error(request, "Password must be at least 8 characters long!")
+                return redirect('changepassword')
 
-        # Update the user's password
-        myuser.set_password(newpass1)
-        myuser.save()
-        
-        # Update the session hash to keep the user logged in after the password change
-        update_session_auth_hash(request, myuser)
+            myuser = request.user
 
-        messages.success(request, "Your password has been successfully updated")
-        return redirect('profile')
+            # Check if the old password is correct
+            if not check_password(oldpass, myuser.password):
+                messages.error(request, "The old password is incorrect!")
+                return redirect('changepassword')
 
-    return render(request, 'basicAuth/changepassword.html')
+            # Update the user's password
+            myuser.set_password(newpass1)
+            myuser.save()
+            
+            # Update the session hash to keep the user logged in after the password change
+            update_session_auth_hash(request, myuser)
+
+            messages.success(request, "Your password has been successfully updated")
+            return redirect('profile')
+
+    return render(request, 'basicAuth/changepassword.html', {'background_color': background_color})
 
 def delete(request):
 
-    if request.method == 'POST':
+    if request.user.is_authenticated:
 
-        # Get the post parameters
-        password = request.POST['pass']
+        user_profile = UserProfile.objects.get_or_create(user=request.user, defaults={'background_color': '#6D6D6D'})[0]
+        background_color = user_profile.background_color
 
-        # Check if the password is correct
-        myuser = request.user
-        if not check_password(password, myuser.password):
-            messages.error(request, "The password is incorrect!")
-            return redirect('delete')
+        if request.method == 'POST':
 
-        # Delete the user
-        myuser.delete()
-        messages.success(request, "Your account has been successfully deleted")
-        return redirect('home')
+            password = request.POST['pass']
 
-    return render(request, 'basicAuth/delete.html')
+            myuser = request.user
+            if not check_password(password, myuser.password):
+                messages.error(request, "The password is incorrect!")
+                return redirect('delete')
+
+            myuser.delete()
+            messages.success(request, "Your account has been successfully deleted")
+            return redirect('home')
+
+    return render(request, 'basicAuth/delete.html', {'background_color': background_color})
 
 def activate(request, uidb64, token):
+
     try:
+
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
+
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+
         user = None
 
     if user is not None and default_token_generator.check_token(user, token):
+
         user.is_active = True
         user.save()
         messages.success(request, 'Your account has been activated. You can now log in.')
         return redirect('signin')  # Replace 'login' with the name of your login view
+    
     else:
+
         messages.error(request, 'Activation link is invalid or has expired.')
         return redirect('home')  # Replace 'home' with the name of your homepage view
     
 def send_activation_email(request, user):
 
-    token = default_token_generator.make_token(user)
+    user = User.objects.select_related('userprofile').get(pk=user.pk)
 
-    #debug
-    print(token)
+    token = default_token_generator.make_token(user)
 
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
 
-    #debug
-    print(uidb64)
-
     activation_link = request.build_absolute_uri(reverse('activate', args=[uidb64, token]))
-
-    #debug
-    print(activation_link)
 
     subject = 'Activate your account'
     message = f'''Account Created Successfully!
@@ -300,7 +319,7 @@ def send_activation_email(request, user):
 
                 {activation_link}'''
     
-    from_email = 'rotatingcloudbasicauth@gmail.com'  # Replace this with your "from" email address
+    from_email = 'rotatingcloudbasicauth@gmail.com' 
     recipient_list = [user.email]
 
     send_mail(subject, message, from_email, recipient_list)
@@ -309,12 +328,18 @@ def send_activation_email(request, user):
 def resend_activation_email(request):
 
     user = request.user
+
     if not user.is_active:
+
         send_activation_email(request, user)
         messages.success(request, 'An activation email has been sent to your email address.')
+        return redirect('signin')
+    
     else:
+
         messages.error(request, 'Your account is already active.')
-    return redirect('profile')  # Replace 'profile' with the name of your profile view
+
+    return redirect('profile')
 
 def setcolor(request, color):
     
@@ -324,11 +349,10 @@ def setcolor(request, color):
         userprofile = UserProfile.objects.get(user=user)
         userprofile.background_color = color
         userprofile.save()
-        return redirect('profile')
-    
+
     else:
 
-        return redirect('home')
+        messages.error(request, "There was error setting your color. Please try again.")
 
 class UserProfileForm(forms.ModelForm):
 

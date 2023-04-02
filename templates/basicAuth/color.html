@@ -11,6 +11,20 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style id="dynamic-styles"></style>
 
+    {% if background_color %}
+
+        <style>
+
+            body {
+
+                background-color: {{ background_color }};
+
+            }
+
+        </style>
+        
+    {% endif %}
+
 </head>
 <body>
     

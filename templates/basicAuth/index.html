@@ -11,6 +11,20 @@
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
+    {% if background_color %}
+
+        <style>
+
+            body {
+
+                background-color: {{ background_color }};
+
+            }
+
+        </style>
+        
+    {% endif %}
+
 </head>
 <body>
 
@@ -56,6 +70,7 @@
     {% endif %}
 
     <script>
+
         document.addEventListener('DOMContentLoaded', function () {
             const closeButtons = document.getElementsByClassName('close');
             for (let i = 0; i < closeButtons.length; i++) {
@@ -64,6 +79,7 @@
                 });
             }
         });
+
     </script>
 
 </body>

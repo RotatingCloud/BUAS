@@ -9,6 +9,20 @@
     <title>Log in</title>
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% if background_color %}
+
+        <style>
+
+            body {
+
+                background-color: {{ background_color }};
+
+            }
+
+        </style>
+        
+    {% endif %}
     
 </head>
 <body>
