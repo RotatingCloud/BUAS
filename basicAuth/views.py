@@ -54,11 +54,6 @@ def signup(request):
 
     if request.method == 'POST':
 
-        user = request.user
-        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'primary_color': '#6D6D6D'})[0]
-        primary_color = user_profile.primary_color
-        secondary_color = user_profile.secondary_color
-
         # Get the post parameters
         username = request.POST['username']
         fname = request.POST['fname']
@@ -104,7 +99,7 @@ def signup(request):
 
             messages.error(request, "Username must be alphanumeric and may include underscores!")
             return redirect('signup')
-
+        
         # Create the user
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
@@ -125,13 +120,7 @@ def signup(request):
         
         return redirect('home')
     
-    context = {
-
-            'primary_color': primary_color,
-            'secondary_color': secondary_color
-    }
-
-    return render(request, 'basicAuth/signup.html', context)
+    return render(request, 'basicAuth/signup.html')
 
 def signin(request):
 

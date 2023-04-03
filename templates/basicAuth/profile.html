@@ -141,14 +141,14 @@
 
         </div>
 
-        <div class="from-group">
+        <div class="form-group">
 
             <label for="color">Primary Color</label>
             <input type="color" id="primary_color" name="primary_color" value="{{ primary_color }}">
 
         </div>
 
-        <div class="from-group">
+        <div class="form-group">
 
             <label for="color">Secondary Color</label>
             <input type="color" id="secondary_color" name="secondary_color" value="{{ secondary_color }}">
@@ -200,6 +200,7 @@
 
                 element.style.color = event.target.value;
                 element.style.borderColor = event.target.value;
+                element.style.placeholder = event.target.value;
 
             });
 

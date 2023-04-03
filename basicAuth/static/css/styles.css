@@ -51,7 +51,7 @@ body {
     cursor: pointer;
     background-color: #5e5e5e;
     color: #ffffff;
-    transition: 0.3s;
+    transition: 0.15s;
 }
 
 .button:hover {
@@ -78,6 +78,9 @@ label {
 
     display: block;
     margin: 10px;
+    border: none;
+
+    width: 200px;
 }
 
 .submit-button {
@@ -97,7 +100,7 @@ label {
     align-items: center;
     text-align: center;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.15s;
 }
 
 .submit-button:hover {
@@ -110,12 +113,15 @@ label {
 input {
 
     width: 100%;
+
+    max-width: 300px;
+
     border: none;
+
     border-bottom: 1px solid white;
     color: white;
     outline: none;
     padding-bottom: 5px;
-
     background-color: #6d6d6d;
     
 }
@@ -168,12 +174,4 @@ h3 {
 .alert {
 
     letter-spacing: 1px;
-}
-
-#color-input {
-
-    width: 100%;
-    padding-bottom: 5px;
-    border: none;
-    
 }

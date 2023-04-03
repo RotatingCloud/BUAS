@@ -3,26 +3,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
-    {% if primary_color %}
-
-        <style>
-
-            body {
-
-                background-color: {{ primary_color }};
-
-            }
-
-        </style>
-        
-    {% endif %}
 
 </head>
 <body>
@@ -49,7 +36,7 @@
         <div class='form-group'>
 
             <label for="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="johndoe123" required>
+            <input type="text" name="username" id="username " placeholder="johndoe123" required>
 
         </div>
 
@@ -88,17 +75,17 @@
 
         </div>
 
-        <div class="from-group">
+        <div class="form-group">
 
-            <label for="color">Background Color</label>
-            <input type="color" id="primary_color" name="primary_color" value="{{ primary_color }}">
+            <label for="color">Primary Color</label>
+            <input class='color-picker' type="color" id="primary_color" name="primary_color">
 
         </div>
 
-        <div class="from-group">
+        <div class="form-group">
 
-            <label for="color">Text Color</label>
-            <input type="color" id="text_color" name="text_color" value="{{ text_color }}">
+            <label for="color">Secondary Color</label>
+            <input class='color-picker' type="color" id="secondary_color" name="secondary_color">
 
         </div>
         
@@ -115,52 +102,49 @@
     <script>
 
         const primaryColorInput = document.getElementById('primary_color');
-        const secondaryColorInput = document.getElementById('secondary_color');
-        const buttonElements = document.querySelector('.button');
+        const textColorInput = document.getElementById('secondary_color');
+        const buttonElements = document.querySelectorAll('.button');
         const bodyElement = document.querySelector('body');
         const submitButtonElement = document.querySelector('.submit-button');
         const inputElements = document.querySelectorAll('input');
 
         primaryColorInput.addEventListener('input', (event) => {
-
             bodyElement.style.backgroundColor = event.target.value;
-
             inputElements.forEach((element) => {
                 element.style.backgroundColor = event.target.value;
             });
-            
+
             submitButtonElement.style.color = event.target.value;
-            buttonElements.style.color = event.target.value;
+            buttonElements.forEach((element) => {
+                element.style.color = event.target.value;
+            });
         });
 
-        secondaryColorInput.addEventListener('input', (event) => {
-
+        textColorInput.addEventListener('input', (event) => {
+            
             bodyElement.style.color = event.target.value;
 
             inputElements.forEach((element) => {
-
                 element.style.color = event.target.value;
                 element.style.borderColor = event.target.value;
-
             });
 
-            buttonElements.style.backgroundColor = event.target.value;
+            buttonElements.forEach((element) => {
+                element.style.backgroundColor = event.target.value;
+            });
             submitButtonElement.style.backgroundColor = event.target.value;
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-
             const closeButtons = document.getElementsByClassName('close');
 
             for (let i = 0; i < closeButtons.length; i++) {
-
                 closeButtons[i].addEventListener('click', function () {
-
                     this.closest('.alert').remove();
-
                 });
             }
         });
+
 
     </script>
 
