@@ -114,23 +114,38 @@
 
     <script>
 
-        const backgroundColorInput = document.getElementById('primary_color');
-        const textInput = document.getElementById('text_color');
+        const primaryColorInput = document.getElementById('primary_color');
+        const secondaryColorInput = document.getElementById('secondary_color');
+        const buttonElements = document.querySelector('.button');
         const bodyElement = document.querySelector('body');
+        const submitButtonElement = document.querySelector('.submit-button');
         const inputElements = document.querySelectorAll('input');
 
-        backgroundColorInput.addEventListener('input', (event) => {
+        primaryColorInput.addEventListener('input', (event) => {
+
             bodyElement.style.backgroundColor = event.target.value;
+
             inputElements.forEach((element) => {
                 element.style.backgroundColor = event.target.value;
             });
+            
+            submitButtonElement.style.color = event.target.value;
+            buttonElements.style.color = event.target.value;
         });
 
-        textInput.addEventListener('input', (event) => {
+        secondaryColorInput.addEventListener('input', (event) => {
+
             bodyElement.style.color = event.target.value;
+
             inputElements.forEach((element) => {
+
                 element.style.color = event.target.value;
+                element.style.borderColor = event.target.value;
+
             });
+
+            buttonElements.style.backgroundColor = event.target.value;
+            submitButtonElement.style.backgroundColor = event.target.value;
         });
 
         document.addEventListener('DOMContentLoaded', function () {

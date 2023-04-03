@@ -21,6 +21,12 @@
 
             }
 
+            input {
+
+                background-color: {{ primary_color }};
+                
+            }
+
         </style>
         
     {% endif %}
@@ -41,10 +47,21 @@
                 color: {{ primary_color }};
             }
 
+            .submit-button {
+
+                background-color: {{ secondary_color }};
+                color: {{ primary_color }};
+            }
+
+            input {
+
+                color: {{ secondary_color }};
+                border-color: {{ secondary_color }};
+            }
+
         </style>
 
     {% endif %}
-
 </head>
 <body>
 
