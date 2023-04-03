@@ -14,5 +14,6 @@ urlpatterns = [
     path('delete/', views.delete, name='delete'),
     path('activate/<uidb64>/<token>', views.activate, name='activate'),
     path('resend_activation_email/', views.resend_activation_email, name='resend_activation_email'),
-    path('setcolor', views.setcolor, name='setcolor'),
+    path('setBackgroundColor', views.setBackgroundColor, name='setBackgroundColor'),
+    path('setTextColor', views.setTextColor, name='setTextColor'),
 ]

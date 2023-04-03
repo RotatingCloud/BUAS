@@ -91,7 +91,14 @@
         <div class="from-group">
 
             <label for="color">Background Color</label>
-            <input type="color" id="color-input" name="color" value="{{ background_color }}">
+            <input type="color" id="background_color" name="background_color" value="{{ background_color }}">
+
+        </div>
+
+        <div class="from-group">
+
+            <label for="color">Text Color</label>
+            <input type="color" id="text_color" name="text_color" value="{{ text_color }}">
 
         </div>
         
@@ -107,6 +114,25 @@
 
     <script>
 
+        const backgroundColorInput = document.getElementById('background_color');
+        const textInput = document.getElementById('text_color');
+        const bodyElement = document.querySelector('body');
+        const inputElements = document.querySelectorAll('input');
+
+        backgroundColorInput.addEventListener('input', (event) => {
+            bodyElement.style.backgroundColor = event.target.value;
+            inputElements.forEach((element) => {
+                element.style.backgroundColor = event.target.value;
+            });
+        });
+
+        textInput.addEventListener('input', (event) => {
+            bodyElement.style.color = event.target.value;
+            inputElements.forEach((element) => {
+                element.style.color = event.target.value;
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
 
             const closeButtons = document.getElementsByClassName('close');
@@ -119,21 +145,6 @@
 
                 });
             }
-        });
-
-    </script>
-
-    <script>
-
-        const colorInput = document.getElementById('color-input');
-        const bodyElement = document.querySelector('body');
-        const inputElements = document.querySelectorAll('input');
-
-        colorInput.addEventListener('input', (event) => {
-            bodyElement.style.backgroundColor = event.target.value;
-            inputElements.forEach((element) => {
-                element.style.backgroundColor = event.target.value;
-            });
         });
 
     </script>

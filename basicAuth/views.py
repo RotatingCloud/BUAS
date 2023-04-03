@@ -17,6 +17,7 @@ def home(request):
 
     user = request.user
     background_color = None
+    text_color = None
     fname = None
     lname = None
     username = None
@@ -27,9 +28,10 @@ def home(request):
         lname = request.user.last_name
         username = request.user.username
 
-        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D'})[0]
+        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D', 'text_color': '#FFFFFF'})[0]
 
         background_color = user_profile.background_color
+        text_color = user_profile.text_color
 
     context = {
 
@@ -37,6 +39,7 @@ def home(request):
         'lname': lname,
         'username': username,
         'background_color': background_color,
+        'text_color': text_color
     }
 
     return render(request, 'basicAuth/index.html', context)
@@ -52,41 +55,42 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
-        color = request.POST['color']
+        background_color = request.POST['background_color']
+        text_color = request.POST['text_color']
 
         # Check for errorneous input
         if User.objects.filter(username=username):
-            print("Username already exist! Please try some other username.")
-            messages.error(request, "Username already exist! Please try some other username.")
+
+            messages.error(request, "Username already exists! Please try some other username.")
             return redirect('signup')
         
         if User.objects.filter(email=email).exists():
-            print("Email Already Registered!!")
-            messages.error(request, "Email Already Registered!!")
+
+            messages.error(request, "Email already registered!!")
             return redirect('signup')
         
         if len(username)>20:
-            print("Username must be under 20 charcters!!")
+
             messages.error(request, "Username must be under 20 charcters!!")
             return redirect('signup')
         
         if len(username) < 4:
-            print("Username must be at least 4 characters long!!")
-            messages.error(request, "Username must be at least 4 characters long!!")
+
+            messages.error(request, "Username must be at least 4 characters!!")
             return redirect('signup')
         
-        if len(pass1)<4:
-            print("Password must be at least 8 characters long!!")
-            messages.error(request, "Password must be at least 8 characters long!!")
+        if len(pass1)<5:
+
+            messages.error(request, "Password must be at least 5 characters!!")
             return redirect('signup')
         
         if pass1 != pass2:
-            print("Passwords didn't matched!!")
-            messages.error(request, "Passwords didn't matched!!")
+
+            messages.error(request, "Passwords didn't match!!")
             return redirect('signup')
         
         if not re.match("^[A-Za-z0-9_.]*$", username):
-            print("Username must be alphanumeric and may include underscores!")
+
             messages.error(request, "Username must be alphanumeric and may include underscores!")
             return redirect('signup')
 
@@ -99,7 +103,8 @@ def signup(request):
 
         profile, created = UserProfile.objects.update_or_create(
             user=myuser,
-            defaults={'background_color': color}
+            defaults={'background_color': background_color, 
+                      'text_color': text_color}
         )
 
         # Send activation email
@@ -202,7 +207,7 @@ def update(request):
         myuser.last_name = lname
         myuser.save()
 
-        setcolor(request, color)
+        setBackgroundColor(request, color)
 
         messages.success(request, "Your account has been successfully updated")
 
@@ -346,7 +351,7 @@ def resend_activation_email(request):
     return redirect('profile')
 
 @login_required
-def setcolor(request, color):
+def setBackgroundColor(request, color):
     
     if request.user.is_authenticated:
 
@@ -359,9 +364,23 @@ def setcolor(request, color):
 
         messages.error(request, "There was error setting your color. Please try again.")
 
+@login_required
+def setTextColor(request, color):
+        
+        if request.user.is_authenticated:
+    
+            user = request.user
+            userprofile = UserProfile.objects.get(user=user)
+            userprofile.text_color = color
+            userprofile.save()
+    
+        else:
+    
+            messages.error(request, "There was error setting your color. Please try again.")
+
 class UserProfileForm(forms.ModelForm):
 
     class Meta:
 
         model = UserProfile
-        fields = ('background_color',)
+        fields = ('background_color', 'text_color')

@@ -7,6 +7,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     background_color = models.CharField(max_length=7, default='#6D6D6D')
+    text_color = models.CharField(max_length=7, default='#FFFFFF')
 
     def __str__(self):
         return self.user.username
