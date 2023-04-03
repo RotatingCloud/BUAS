@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,23 +11,56 @@
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    {% if background_color %}
+    {% if primary_color %}
 
         <style>
 
             body {
 
-                background-color: {{ background_color }};
+                background-color: {{ primary_color }};
 
             }
 
             input {
 
-                background-color: {{ background_color }};
+                background-color: {{ primary_color }};
+                
             }
 
         </style>
         
+    {% endif %}
+
+    {% if secondary_color %}
+
+        <style>
+
+            body {
+
+                color: {{ secondary_color }};
+
+            }
+
+            .button {
+
+                background-color: {{ secondary_color }};
+                color: {{ primary_color }};
+            }
+
+            .submit-button {
+
+                background-color: {{ secondary_color }};
+                color: {{ primary_color }};
+            }
+
+            input {
+
+                color: {{ secondary_color }};
+                border-color: {{ secondary_color }};
+            }
+
+        </style>
+
     {% endif %}
     
 </head>
@@ -109,17 +143,23 @@
 
         <div class="from-group">
 
-            <label for="color">Background Color:</label>
-            <input type="color" id="color-input" name="color" value="{{ background_color|default:'#6d6d6d' }}">
+            <label for="color">Primary Color</label>
+            <input type="color" id="primary_color" name="primary_color" value="{{ primary_color }}">
 
         </div>
-        
+
+        <div class="from-group">
+
+            <label for="color">Secondary Color</label>
+            <input type="color" id="secondary_color" name="secondary_color" value="{{ secondary_color }}">
+
+        </div>
 
         <div class="button-container">
 
             <button type="submit" class="submit-button">Update</button>
     
-            <a href="/" class="button">Home:</a>
+            <a href="/" class="button">Home</a>
 
             {% if user.is_active == False %}
 
@@ -133,6 +173,40 @@
 
     <script>
 
+        const primaryColorInput = document.getElementById('primary_color');
+        const secondaryColorInput = document.getElementById('secondary_color');
+        const buttonElements = document.querySelector('.button');
+        const bodyElement = document.querySelector('body');
+        const submitButtonElement = document.querySelector('.submit-button');
+        const inputElements = document.querySelectorAll('input');
+
+        primaryColorInput.addEventListener('input', (event) => {
+
+            bodyElement.style.backgroundColor = event.target.value;
+
+            inputElements.forEach((element) => {
+                element.style.backgroundColor = event.target.value;
+            });
+            
+            submitButtonElement.style.color = event.target.value;
+            buttonElements.style.color = event.target.value;
+        });
+
+        secondaryColorInput.addEventListener('input', (event) => {
+
+            bodyElement.style.color = event.target.value;
+
+            inputElements.forEach((element) => {
+
+                element.style.color = event.target.value;
+                element.style.borderColor = event.target.value;
+
+            });
+
+            buttonElements.style.backgroundColor = event.target.value;
+            submitButtonElement.style.backgroundColor = event.target.value;
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
 
             const closeButtons = document.getElementsByClassName('close');
@@ -145,21 +219,6 @@
 
                 });
             }
-        });
-
-    </script>
-
-    <script>
-
-        const colorInput = document.getElementById('color-input');
-        const bodyElement = document.querySelector('body');
-        const inputElements = document.querySelectorAll('input');
-
-        colorInput.addEventListener('input', (event) => {
-            bodyElement.style.backgroundColor = event.target.value;
-            inputElements.forEach((element) => {
-                element.style.backgroundColor = event.target.value;
-            });
         });
 
     </script>

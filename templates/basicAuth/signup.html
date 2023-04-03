@@ -10,13 +10,13 @@
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    {% if background_color %}
+    {% if primary_color %}
 
         <style>
 
             body {
 
-                background-color: {{ background_color }};
+                background-color: {{ primary_color }};
 
             }
 
@@ -91,7 +91,7 @@
         <div class="from-group">
 
             <label for="color">Background Color</label>
-            <input type="color" id="background_color" name="background_color" value="{{ background_color }}">
+            <input type="color" id="primary_color" name="primary_color" value="{{ primary_color }}">
 
         </div>
 
@@ -114,7 +114,7 @@
 
     <script>
 
-        const backgroundColorInput = document.getElementById('background_color');
+        const backgroundColorInput = document.getElementById('primary_color');
         const textInput = document.getElementById('text_color');
         const bodyElement = document.querySelector('body');
         const inputElements = document.querySelectorAll('input');

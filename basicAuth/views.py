@@ -13,11 +13,17 @@ from django import forms
 from .models import UserProfile
 import re
 
+def hex_to_rgb(hex):
+
+    hex = hex.lstrip('#')
+
+    return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+
 def home(request):
 
     user = request.user
-    background_color = None
-    text_color = None
+    primary_color = None
+    secondary_color = None
     fname = None
     lname = None
     username = None
@@ -28,18 +34,18 @@ def home(request):
         lname = request.user.last_name
         username = request.user.username
 
-        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D', 'text_color': '#FFFFFF'})[0]
+        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'primary_color': '#6D6D6D', 'secondary_color': '#FFFFFF'})[0]
 
-        background_color = user_profile.background_color
-        text_color = user_profile.text_color
+        primary_color = user_profile.primary_color
+        secondary_color = user_profile.secondary_color
 
     context = {
 
         'fname': fname,
         'lname': lname,
         'username': username,
-        'background_color': background_color,
-        'text_color': text_color
+        'primary_color': primary_color,
+        'secondary_color': secondary_color
     }
 
     return render(request, 'basicAuth/index.html', context)
@@ -55,8 +61,8 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
-        background_color = request.POST['background_color']
-        text_color = request.POST['text_color']
+        primary_color = request.POST['primary_color']
+        secondary_color = request.POST['secondary_color']
 
         # Check for errorneous input
         if User.objects.filter(username=username):
@@ -103,8 +109,8 @@ def signup(request):
 
         profile, created = UserProfile.objects.update_or_create(
             user=myuser,
-            defaults={'background_color': background_color, 
-                      'text_color': text_color}
+            defaults={'primary_color': primary_color, 
+                      'secondary_color': secondary_color}
         )
 
         # Send activation email
@@ -159,12 +165,14 @@ def profile(request):
     if request.user.is_authenticated:
 
         user = request.user
-        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'background_color': '#6D6D6D'})[0]
-        background_color = user_profile.background_color
+        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'primary_color': '#6D6D6D'})[0]
+        primary_color = user_profile.primary_color
+        secondary_color = user_profile.secondary_color
 
         context = {
 
-            'background_color': background_color,
+            'primary_color': primary_color,
+            'secondary_color': secondary_color
         }
 
         return render(request, 'basicAuth/profile.html', context)
@@ -183,20 +191,35 @@ def update(request):
         fname = request.POST['fname']
         lname = request.POST['lname']
         email = request.POST['email']
-        color = request.POST['color']
+        primary_color = request.POST['primary_color']
+        secondary_color = request.POST['secondary_color']
 
         # Check for erroneous input
         if len(username) > 20:
+
             messages.error(request, "Username must be under 20 characters!")
             return redirect('profile')
 
         if len(username) < 4:
+
             messages.error(request, "Username must be at least 4 characters long!")
             return redirect('profile')
 
         if not re.match("^[A-Za-z0-9_.]*$", username):
-            print("Username must be alphanumeric and may include underscores!")
+            
             messages.error(request, "Username must be alphanumeric and may include underscores!")
+            return redirect('signup')
+        
+        user_pk = request.user.pk
+
+        if User.objects.exclude(pk=user_pk).filter(username=username):
+
+            messages.error(request, "Username already exists! Please try some other username.")
+            return redirect('signup')
+
+        if User.objects.exclude(pk=user_pk).filter(email=email).exists():
+
+            messages.error(request, "Email already registered!!")
             return redirect('signup')
 
         # Update the user information
@@ -207,7 +230,8 @@ def update(request):
         myuser.last_name = lname
         myuser.save()
 
-        setBackgroundColor(request, color)
+        setPrimaryColor(request, primary_color)
+        setSecondaryColor(request, secondary_color)
 
         messages.success(request, "Your account has been successfully updated")
 
@@ -216,12 +240,14 @@ def update(request):
     return render(request, 'basicAuth/profile.html')
 
 @login_required
-def changepassword(request):
+def changePassword(request):
 
     if request.user.is_authenticated:
 
-        user_profile = UserProfile.objects.get_or_create(user=request.user, defaults={'background_color': '#6D6D6D'})[0]
-        background_color = user_profile.background_color
+        user_profile = UserProfile.objects.get_or_create(user=request.user, defaults={'primary_color': '#6D6D6D'})[0]
+        primary_color = user_profile.primary_color
+        secondary_color = user_profile.secondary_color
+        secondary_color_rgb = hex_to_rgb(secondary_color)
 
         if request.method == 'POST':
 
@@ -233,18 +259,18 @@ def changepassword(request):
             # Check for erroneous input
             if newpass1 != newpass2:
                 messages.error(request, "Passwords didn't match!")
-                return redirect('changepassword')
+                return redirect('changePassword')
 
             if len(newpass1) < 4: 
                 messages.error(request, "Password must be at least 8 characters long!")
-                return redirect('changepassword')
+                return redirect('changePassword')
 
             myuser = request.user
 
             # Check if the old password is correct
             if not check_password(oldpass, myuser.password):
                 messages.error(request, "The old password is incorrect!")
-                return redirect('changepassword')
+                return redirect('changePassword')
 
             # Update the user's password
             myuser.set_password(newpass1)
@@ -255,16 +281,25 @@ def changepassword(request):
 
             messages.success(request, "Your password has been successfully updated")
             return redirect('profile')
+        
+    context = {
 
-    return render(request, 'basicAuth/changepassword.html', {'background_color': background_color})
+            'primary_color': primary_color,
+            'secondary_color': secondary_color,
+            'secondary_color_rgb': secondary_color_rgb,
+        }
+
+    return render(request, 'basicAuth/changePassword.html', context)
 
 @login_required
 def delete(request):
 
     if request.user.is_authenticated:
 
-        user_profile = UserProfile.objects.get_or_create(user=request.user, defaults={'background_color': '#6D6D6D'})[0]
-        background_color = user_profile.background_color
+        user_profile = UserProfile.objects.get_or_create(user=request.user, defaults={'primary_color': '#6D6D6D'})[0]
+        primary_color = user_profile.primary_color
+        secondary_color = user_profile.secondary_color
+        secondary_color_rgb = hex_to_rgb(secondary_color)
 
         if request.method == 'POST':
 
@@ -278,8 +313,15 @@ def delete(request):
             myuser.delete()
             messages.success(request, "Your account has been successfully deleted")
             return redirect('home')
+        
+    context = {
 
-    return render(request, 'basicAuth/delete.html', {'background_color': background_color})
+            'primary_color': primary_color,
+            'secondary_color': secondary_color,
+            'secondary_color_rgb': secondary_color_rgb,
+    }
+    
+    return render(request, 'basicAuth/delete.html', context)
 
 def activate(request, uidb64, token):
 
@@ -322,7 +364,7 @@ def send_activation_email(request, user):
                 Username: {user.username}
                 Email: {user.email}
 
-                Color: {user.userprofile.background_color}
+                Color: {user.userprofile.primary_color}
 
                 Click the link below to activate your account:
 
@@ -351,13 +393,13 @@ def resend_activation_email(request):
     return redirect('profile')
 
 @login_required
-def setBackgroundColor(request, color):
+def setPrimaryColor(request, color):
     
     if request.user.is_authenticated:
 
         user = request.user
         userprofile = UserProfile.objects.get(user=user)
-        userprofile.background_color = color
+        userprofile.primary_color = color
         userprofile.save()
 
     else:
@@ -365,13 +407,13 @@ def setBackgroundColor(request, color):
         messages.error(request, "There was error setting your color. Please try again.")
 
 @login_required
-def setTextColor(request, color):
+def setSecondaryColor(request, color):
         
         if request.user.is_authenticated:
     
             user = request.user
             userprofile = UserProfile.objects.get(user=user)
-            userprofile.text_color = color
+            userprofile.secondary_color = color
             userprofile.save()
     
         else:
@@ -383,4 +425,4 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
 
         model = UserProfile
-        fields = ('background_color', 'text_color')
+        fields = ('primary_color', 'secondary_color')

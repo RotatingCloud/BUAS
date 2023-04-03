@@ -9,23 +9,70 @@
     <title>Delete Account</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    {% if background_color %}
+    {% if primary_color %}
 
         <style>
 
             body {
 
-                background-color: {{ background_color }};
+                background-color: {{ primary_color }};
 
             }
 
             input {
 
-                background-color: {{ background_color }};
+                background-color: {{ primary_color }};
             }
 
         </style>
         
+    {% endif %}
+
+    {% if secondary_color %}
+
+        <style>
+
+            body {
+
+                color: {{ secondary_color }};
+
+            }
+
+            .button {
+
+                background-color: {{ secondary_color }};
+                color: {{ primary_color }};
+            }
+
+            .submit-button {
+
+                background-color: {{ secondary_color }};
+                color: {{ primary_color }};
+            }
+
+            input {
+
+                color: {{ secondary_color }};
+                border-color: {{ secondary_color }};
+            }
+
+            input::-webkit-input-placeholder {
+
+                color: rgba({{ secondary_color_rgb.0 }}, {{ secondary_color_rgb.1 }}, {{ secondary_color_rgb.2 }}, 0.5);
+            }
+            
+            input:-ms-input-placeholder {
+            
+                color: rgba({{ secondary_color_rgb.0 }}, {{ secondary_color_rgb.1 }}, {{ secondary_color_rgb.2 }}, 0.5);
+            }
+            
+            input::placeholder {
+            
+                color: rgba({{ secondary_color_rgb.0 }}, {{ secondary_color_rgb.1 }}, {{ secondary_color_rgb.2 }}, 0.5);
+            }
+
+        </style>
+
     {% endif %}
 
 </head>

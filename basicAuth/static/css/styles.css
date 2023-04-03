@@ -44,25 +44,20 @@ body {
 
     height: 60px;
     width: 100px;
-
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-
     cursor: pointer;
-
     background-color: #5e5e5e;
-
     color: #ffffff;
-
     transition: 0.3s;
 }
 
 .button:hover {
 
     background-color: #333;
-
+    color: #ffffff;
 }
 
 a {
@@ -89,7 +84,6 @@ label {
 
     height: 60px;
     width: 100px;
-
     background-color: #5e5e5e;
     border: none;
     font-size: inherit;
@@ -97,22 +91,19 @@ label {
     color: inherit;
     text-decoration: none;
     cursor: pointer;
-
     color: #ffffff;
-
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
 .submit-button:hover {
 
     background-color: #333;
+    color: #ffffff;
 
 }
 
