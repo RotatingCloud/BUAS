@@ -1,1 +1,1 @@
-web: gunicorn BUAS.wsgi --log-file -
+web: gunicorn buas.wsgi --log-file -
