@@ -89,8 +89,10 @@
         </div>
 
         <div class="from-group">
+
             <label for="color">Background Color</label>
-            <input type="color" id="color-input" name="color" value="{{ background_color|default:'#6d6d6d' }}">
+            <input type="color" id="color-input" name="color" value="{{ background_color }}">
+
         </div>
         
         <div class="button-container">
@@ -104,6 +106,25 @@
     </form>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const closeButtons = document.getElementsByClassName('close');
+
+            for (let i = 0; i < closeButtons.length; i++) {
+
+                closeButtons[i].addEventListener('click', function () {
+
+                    this.closest('.alert').remove();
+
+                });
+            }
+        });
+
+    </script>
+
+    <script>
+
         const colorInput = document.getElementById('color-input');
         const bodyElement = document.querySelector('body');
         const inputElements = document.querySelectorAll('input');
@@ -114,6 +135,7 @@
                 element.style.backgroundColor = event.target.value;
             });
         });
+
     </script>
 
 </body>

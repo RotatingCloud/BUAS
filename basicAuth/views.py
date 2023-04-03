@@ -41,7 +41,6 @@ def home(request):
 
     return render(request, 'basicAuth/index.html', context)
 
-
 def signup(request):
 
     if request.method == 'POST':
@@ -142,12 +141,14 @@ def signin(request):
 
     return render(request, 'basicAuth/signin.html')
 
+@login_required
 def signout(request):
     
     logout(request)
     messages.success(request, "Successfully Logged Out")
     return redirect('home')
-    
+
+@login_required  
 def profile(request):
 
     if request.user.is_authenticated:
@@ -166,7 +167,8 @@ def profile(request):
     else:
 
         return redirect('home')
-  
+
+@login_required
 def update(request):
 
     if request.method == 'POST':
@@ -208,6 +210,7 @@ def update(request):
 
     return render(request, 'basicAuth/profile.html')
 
+@login_required
 def changepassword(request):
 
     if request.user.is_authenticated:
@@ -250,6 +253,7 @@ def changepassword(request):
 
     return render(request, 'basicAuth/changepassword.html', {'background_color': background_color})
 
+@login_required
 def delete(request):
 
     if request.user.is_authenticated:
@@ -341,6 +345,7 @@ def resend_activation_email(request):
 
     return redirect('profile')
 
+@login_required
 def setcolor(request, color):
     
     if request.user.is_authenticated:
