@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 import os
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -82,11 +83,23 @@ WSGI_APPLICATION = 'buas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd5vj5h6d9na3ai',
+        'USER': 'bojeabtrwdoekc',
+        'PASSWORD': '01016f554edc16392e0621361caf8d24fb773a8ab2512e22240bffed778fb1a0',
+        'HOST': 'ec2-44-213-151-75.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+
+    db_from_env = dj_database_url.parse(DATABASE_URL)
+    DATABASES['default'].update(db_from_env)
+
+DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
