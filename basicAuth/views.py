@@ -54,6 +54,11 @@ def signup(request):
 
     if request.method == 'POST':
 
+        user = request.user
+        user_profile = UserProfile.objects.get_or_create(user=user, defaults={'primary_color': '#6D6D6D'})[0]
+        primary_color = user_profile.primary_color
+        secondary_color = user_profile.secondary_color
+
         # Get the post parameters
         username = request.POST['username']
         fname = request.POST['fname']
@@ -119,8 +124,14 @@ def signup(request):
         messages.success(request, "Your account has been successfully created! Please check your email for activation link.")
         
         return redirect('home')
+    
+    context = {
 
-    return render(request, 'basicAuth/signup.html')
+            'primary_color': primary_color,
+            'secondary_color': secondary_color
+    }
+
+    return render(request, 'basicAuth/signup.html', context)
 
 def signin(request):
 
