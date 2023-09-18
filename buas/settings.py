@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-w#i-)^9c)72$*vj392=e!q03v9%b8-#1#q^@b4x(k@iropjh2h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'buas.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'buas.herokuapp.com','basicuserauthsys.onrender.com']
 
 # Application definition
 
@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'buas.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd5vj5h6d9na3ai',
-        'USER': 'bojeabtrwdoekc',
-        'PASSWORD': '01016f554edc16392e0621361caf8d24fb773a8ab2512e22240bffed778fb1a0',
-        'HOST': 'ec2-44-213-151-75.compute-1.amazonaws.com',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'buasdb1234',
+        'HOST': 'buas.ct2r4mzehbkq.us-west-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
