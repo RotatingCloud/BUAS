@@ -1,6 +1,6 @@
 databases:
   - name: buas
-    databaseName: postgres
+    databaseName: buas-db
     user: postgres
 
 services:
