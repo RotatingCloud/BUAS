@@ -1,7 +1,7 @@
 databases:
   - name: buas
-    databaseName: buas-db
-    user: postgres
+    databaseName: buas
+    user: buas
 
 services:
   - type: web
