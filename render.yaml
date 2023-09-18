@@ -1,0 +1,20 @@
+databases:
+  - name: buas
+    databaseName: buas-db
+    user: basicAuth
+
+services:
+  - type: web
+    name: buas
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn buas.wsgi:application"
+    envVars:
+      - key: buas.ct2r4mzehbkq.us-west-1.rds.amazonaws.com
+        fromDatabase:
+          name: postgres
+          property: connectionString
+      - key: django-insecure-w#i-)^9c)72$*vj392=e!q03v9%b8-#1#q^@b4x(k@iropjh2h
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
