@@ -1,2 +1,36 @@
-# Ignore .env file
+# Python Files
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+.Python
+db.sqlite3
+
+# Virtual Environment
+venv/
+.venv/
+ENV/
+
+# Development Tools
+.idea/
+.vscode/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Secrets and Config
 .env
+
+# Media and Static
+media/
+static/
+
+# Cache and Logs
+*.log
+.cache/
+
+# Others
+.pytest_cache/
+*.swp
+*.swo
