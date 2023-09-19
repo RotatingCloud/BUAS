@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+from buas.env import config
 import os
 import dj_database_url
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -22,7 +23,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
+SECRET_KEY = config("SECRET_KEY", default=None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
@@ -88,12 +89,12 @@ WSGI_APPLICATION = 'buas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'buasdb1234',
-        'HOST': 'buas.ct2r4mzehbkq.us-west-1.rds.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': config('BUAS_DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': config('BUAS_DB_NAME', 'db.sqlite'),
+        'USER': config('BUAS_DB_USER', ''),
+        'PASSWORD': config('BUAS_DB_PASSWORD', ''),
+        'HOST': config('BUAS_DB_HOSTNAME', None),
+        'PORT': config('BUAS_DB_PORT', None),
     }
 }
 
