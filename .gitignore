@@ -25,7 +25,6 @@ Thumbs.db
 # Media and Static
 media/
 static/
-staticfiles/
 
 # Cache and Logs
 *.log
