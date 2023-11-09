@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
-from buas.env import config
 import os
 import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +23,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", default=None)
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -88,16 +88,16 @@ WSGI_APPLICATION = 'buas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': config('BUAS_DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': config('BUAS_DB_NAME', 'db.sqlite'),
-        'USER': config('BUAS_DB_USER', ''),
-        'PASSWORD': config('BUAS_DB_PASSWORD', ''),
-        'HOST': config('BUAS_DB_HOSTNAME', None),
-        'PORT': config('BUAS_DB_PORT', None),
+        'ENGINE': os.getenv('BUAS_DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('POSTGRES_DB', 'db.sqlite'),
+        'USER': os.getenv('POSTGRES_USER', ''),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        'HOST': os.getenv('BUAS_DB_HOSTNAME', None),
+        'PORT': os.getenv('BUAS_DB_PORT', None),
     }
 }
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL:
 
@@ -159,9 +159,9 @@ if not DEBUG:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='')
-EMAIL_HOST = config('EMAIL_HOST', default='')
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', default='')
+EMAIL_HOST = os.getenv('EMAIL_HOST', default='')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='') 
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', default='') 
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', default='')
